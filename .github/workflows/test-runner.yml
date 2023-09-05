@@ -50,4 +50,3 @@ jobs:
           checkName: ${{ matrix.unityVersion }} ${{ matrix.testMode }} tests result
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           coverageOptions: "generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+my.assembly.*"
-          packageMode: true
