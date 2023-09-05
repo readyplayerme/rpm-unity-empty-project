@@ -1,9 +1,10 @@
-name: Run Tests
+name: Empty Project Integration
 
-on:
-  pull_request:
-    types: [ opened, reopened ]
-  workflow_dispatch:
+inputs:
+  targetBranch:
+    description: 'Branch - release/v1.0.0, develop, main'
+    required: true
+    default: 'develop'
 
 jobs:
   runAllTests:
@@ -13,6 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        targetBranch:
+          - ${{ github.event.inputs.targetBranch }}
         testMode:
           - playmode
           - editmode
@@ -31,12 +34,12 @@ jobs:
       - name: Get npm
         uses: actions/setup-node@v3
         with:
-          node-version: 18 
+          node-version: 18
       - name: Install openupm-cli
         run: npm install -g openupm-cli
       - run: pwd
-      - name: Add core as package  
-        run: openupm add com.readyplayerme.core@https://github.com/readyplayerme/rpm-unity-sdk-core.git#feature/test-open-upm-dependency
+      - name: Add core as package
+        run: openupm add com.readyplayerme.core@https://github.com/readyplayerme/rpm-unity-sdk-core.git#${{ matrix.targetBranch }}
       - name: Run Tests
         uses: game-ci/unity-test-runner@v2
         env:
